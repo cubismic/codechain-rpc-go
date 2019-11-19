@@ -2,6 +2,7 @@ package primitives
 
 import (
 	"encoding/hex"
+	"errors"
 
 	"github.com/ethereum/go-ethereum/rlp"
 )
@@ -21,6 +22,28 @@ type H512 [64]byte
 func NewH128Zero() H128 {
 	var zero H128 = [16]byte{}
 	return zero
+}
+
+func StringToH128(s string) (H128, error) {
+
+	var res H128
+
+	if len(s) != 32 && (len(s) != 34 || s[0:2] != "0x") {
+		return res, errors.New("Not a 128bit data")
+	}
+
+	if len(s) == 34 {
+		s = s[2:]
+	}
+
+	b, err := hex.DecodeString(s)
+	if err != nil {
+		return res, err
+	}
+
+	copy(res[:], b[:16])
+
+	return res, err
 }
 
 func (h H128) Cmp(g H128) bool {
@@ -48,6 +71,28 @@ func NewH160Zero() H160 {
 	return zero
 }
 
+func StringToH160(s string) (H160, error) {
+
+	var res H160
+
+	if len(s) != 40 && (len(s) != 42 || s[0:2] != "0x") {
+		return res, errors.New("Not a 160bit data")
+	}
+
+	if len(s) == 42 {
+		s = s[2:]
+	}
+
+	b, err := hex.DecodeString(s)
+	if err != nil {
+		return res, err
+	}
+
+	copy(res[:], b[:20])
+
+	return res, err
+}
+
 func (h H160) Cmp(g H160) bool {
 	return h == g
 }
@@ -73,6 +118,28 @@ func NewH256Zero() H256 {
 	return zero
 }
 
+func StringToH256(s string) (H256, error) {
+
+	var res H256
+
+	if len(s) != 64 && (len(s) != 66 || s[0:2] != "0x") {
+		return res, errors.New("Not a 256bit data")
+	}
+
+	if len(s) == 66 {
+		s = s[2:]
+	}
+
+	b, err := hex.DecodeString(s)
+	if err != nil {
+		return res, err
+	}
+
+	copy(res[:], b[:32])
+
+	return res, err
+}
+
 func (h H256) Cmp(g H256) bool {
 	return h == g
 }
@@ -96,6 +163,28 @@ func (h H256) ToJSON() string {
 func NewH512Zero() H512 {
 	var zero H512 = [64]byte{}
 	return zero
+}
+
+func StringToH512(s string) (H512, error) {
+
+	var res H512
+
+	if len(s) != 128 && (len(s) != 130 || s[0:2] != "0x") {
+		return res, errors.New("Not a 512bit data")
+	}
+
+	if len(s) == 130 {
+		s = s[2:]
+	}
+
+	b, err := hex.DecodeString(s)
+	if err != nil {
+		return res, err
+	}
+
+	copy(res[:], b[:64])
+
+	return res, err
 }
 
 func (h H512) Cmp(g H512) bool {
